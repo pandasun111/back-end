@@ -82,13 +82,7 @@ def SemanticSeg(pcs):
 
 	rgb = label2rgb(np.array(labels))
 	xyz = org_pcs[:, 6:9]
-	print(rgb.shape)
-
-	#write_ply("./test.ply", xyz, rgb)
-	ppc = o3d.geometry.PointCloud()
-	ppc.points = o3d.utility.Vector3dVector(xyz)
-	ppc.colors = o3d.utility.Vector3dVector(rgb)
-	o3d.io.write_point_cloud("./test.ply", ppc)
+	return labels
 
 
 
