@@ -5,7 +5,7 @@ from data_wy import SceneDataset
 from model import VoxelNet
 import transforms as transforms
 
-def process(info):
+def reconstruct(info):
     """
     Args:
         info: info for the scene

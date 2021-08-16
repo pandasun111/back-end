@@ -1,9 +1,11 @@
 import os
 import sys
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
-sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/src/")
+sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/src/RGBReconstruct/")
+sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/src/PoseEstimate/")
 
-from src.process import process
+from src.RGBReconstruct.reconstruct import reconstruct
+from src.PoseEstimate.pose_estimation import pose_estimate
 
 def reconstruct_from_rgb(input_frames, input_extrincs, input_intrinsic):
     """
@@ -26,7 +28,21 @@ def reconstruct_from_rgb(input_frames, input_extrincs, input_intrinsic):
             "scene": "scene",
             "frames": frames}
 
-    mesh = process(info)
+    mesh = reconstruct(info)
     
     return mesh
- 
+
+def pose_estimation_from_rgb(input_frames, input_intrinsic, feature_detector="SIFT"):
+    """
+    Args:
+        input_frames: input video stream
+        input_intrinsic: input intrinsic
+        feature_detector: SIFT, FAST, SURF, SHI-TOMAS
+
+    return:
+        poses: camera pose predicted from video sequence
+    """
+    intrinsic = input_intrinsic[:3, :3]
+    poses = pose_estimate(input_frames, intrinsic, feature_detector)
+
+    return poses
