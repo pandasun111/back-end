@@ -6,6 +6,8 @@ __pycache__/
 # model files
 /Service/wy/src/model.ckpt
 Data/
+DAO/dao_test.py
+.idea/
 # C extensions
 *.so
 
