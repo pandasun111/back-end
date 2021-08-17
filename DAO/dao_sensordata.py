@@ -11,9 +11,9 @@ def addSensorData(rgb_stream, depth_stream, lidar_stream, sensor_data, upload_da
     sensor_data_cover type:str
     '''
     assert type(rgb_stream) == str, "rgb_stream should be the path of rgb video"
-    assert type(depth_stream) == str, "depth_stream should be the path of rgb video"
-    assert type(lidar_stream) == str, "lidar_stream should be the path of rgb video"
-    assert type(sensor_data) == str, "sensor_data should be the path of rgb video"
+    assert type(depth_stream) == str, "depth_stream should be the path of depth_stream video"
+    assert type(lidar_stream) == str, "lidar_stream should be the path of lidar_stream video"
+    assert type(sensor_data) == str, "sensor_data should be the path of sensor_data video"
 
     database = Database(DATABASE_PATH)
 
