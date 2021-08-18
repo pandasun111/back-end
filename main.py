@@ -248,7 +248,7 @@ def process_sensor_data():
     addAlgorithmResData(sensor_data_id, 2, "rgb_semantic_segmentation", rgb_sem_seg_path)
     if depth_isExist:
         addAlgorithmResData(sensor_data_id, 1, "depth_reconstruction", depth_recon_path)
-        addAlgorithmResData(sensor_data_id, 2, "depth_semantic_segmentation", depth_sem_seg_path)
+        addAlgorithmResData(sensor_data_id, 3, "depth_semantic_segmentation", depth_sem_seg_path)
 
     received_data.clear()
 
