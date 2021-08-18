@@ -14,9 +14,12 @@ class Database():
         conn = sqlite3.connect(self.database_path)
         c = conn.cursor()
 
-        c.execute(sql)
+        cursor = c.execute(sql)
+
+        last_rowid = cursor.lastrowid
         conn.commit()
         conn.close()
+        return last_rowid
 
     def query(self, sql):
         conn = sqlite3.connect(self.database_path)

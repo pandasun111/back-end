@@ -92,6 +92,14 @@ def SemanticSeg(pcs):
 
 if __name__ == "__main__":
 	pcs = o3d.io.read_point_cloud("./t.ply")
+
+	# 需要 pcs [N, 3]点云， rgb [N, 3]逐点颜色 
+	import open3d as o3d
+
+	pcs = o3d.geometry.PointCloud()
+	pcs.points = o3d.utility.Vector3dVector(xyz)
+	ppc.colors = o3d.utility.Vector3dVector(rgb)
+
 	pcs.estimate_normals()
 	points = pcs.points
 	colors = pcs.colors
