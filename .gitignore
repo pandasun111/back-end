@@ -9,6 +9,7 @@ Data/
 DAO/dao_test.py
 .idea/
 Service/lst/pointnet2_sem/epoch=15-val_loss=0.53-val_acc=0.862.ckpt
+Service/depth_tmp/
 # C extensions
 *.so
 

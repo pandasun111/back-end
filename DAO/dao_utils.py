@@ -3,7 +3,7 @@ import shlex
 import subprocess
 import os
 
-DATABASE_PATH = "/home/magic/NJU-Magic/back-end/Data/njumagic.db"
+DATABASE_PATH = os.path.dirname(os.path.realpath(__file__)) + "/../Data/njumagic.db"
 
 class Database():
     def __init__(self, database_path):
