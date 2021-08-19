@@ -4,7 +4,7 @@ __pycache__/
 *$py.class
 
 # model files
-/Service/wy/src/model.ckpt
+/Service/wy/src/RGBReconstruct/model.ckpt
 Data/
 DAO/dao_test.py
 .idea/
