@@ -20,6 +20,7 @@ import json
 import numpy as np
 from PIL import Image
 import torch
+import torch.utils.data
 import trimesh
 
 from tsdf import TSDF

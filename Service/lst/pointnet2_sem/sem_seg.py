@@ -4,7 +4,7 @@ from networks import PointNet2
 from skimage.color import label2rgb
 import open3d as o3d
 import copy
-
+import os
 def write_ply(file_path, pcs,  colors):
 	colors = (colors * 256).clip(0, 255).astype(np.uint8)
 	with open(file_path, "w") as f:
@@ -29,7 +29,7 @@ def split_pcs(pcs, per_split=4096):
 	pc_num = len(pcs)
 	pc_channle = len(pcs[0, :])
 	if pc_num < per_split:
-		return pcs
+		return np.array([pcs]), None
 
 	batches = int(pc_num / per_split)
 	upper_pc_index = np.arange(0, batches * per_split)
@@ -49,7 +49,7 @@ def SemanticSeg(pcs):
 
 	network = PointNet2(use_xyz=True, attr_channel=6, class_num=13, task="sem", group_type="ssg")
 
-	pth_path = "./epoch=15-val_loss=0.53-val_acc=0.862.ckpt"
+	pth_path = os.path.dirname(os.path.realpath(__file__)) + "/epoch=15-val_loss=0.53-val_acc=0.862.ckpt"
 
 	paramters = torch.load(pth_path, map_location=device)["state_dict"]
 
