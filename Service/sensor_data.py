@@ -216,6 +216,7 @@ def process_sensor_data(recived_data_folder):
     # # rgb reconstruction
     rgb_recon = reconstruct_from_rgb(rgb_frame_list, poses, np.array(sample_data["rgb_intrin"]))
     rgb_recon_path = dir_path + "rgb_reconstruction.ply"
+    rgb_recon_dataset_path = dataset_path + "rgb_reconstruction.ply"
     rgb_recon.export(rgb_recon_path)
 
     # # depth reconstrunction
@@ -223,33 +224,18 @@ def process_sensor_data(recived_data_folder):
         print(sample_data["depth_intrin"])
         vertices, triangles, colors = reconstruct_from_depth(depth_frame_list, poses, np.array(sample_data["depth_intrin"]), rgb_frame_list)
         depth_recon_path = dir_path + "depth_reconstruction.ply"
+        depth_recon_dataset_path = dataset_path + "depth_reconstruction.ply"
         meshwrite_color(depth_recon_path, vertices, triangles, colors)
 
     # # rgb semantic segmentation
     rgb_sem_seg_path = dir_path + "rgb_semantic_segmentation.ply"
+    rgb_sem_seg_dataset_path = dataset_path + "rgb_semantic_segmentation.ply"
     pcs = o3d.io.read_point_cloud(rgb_recon_path)
     pcs.estimate_normals()
     points = pcs.points
     colors = pcs.colors
     normals = pcs.normals
-    pcs = np.concatenate([normals, colors, points], axis=1)
-    label = api_semantic_segmentation(pcs)
-    colors = [np.random.uniform(0,1,(3)) for _ in range(13)]
-    xyz = pcs[:, 6:9]
-    rgb = label2rgb(np.array(label), colors = colors)
-    ppc = o3d.geometry.PointCloud()
-    ppc.points = o3d.utility.Vector3dVector(xyz)
-    ppc.colors = o3d.utility.Vector3dVector(rgb)
-    o3d.io.write_point_cloud(rgb_sem_seg_path, ppc)
-
-    # # depth semantic segmentation
-    if depth_isExist:
-        depth_sem_seg_path = dir_path + "depth_semantic_segmentation.ply"
-        pcs = o3d.io.read_point_cloud(depth_recon_path)
-        pcs.estimate_normals()
-        points = pcs.points
-        colors = pcs.colors
-        normals = pcs.normals
+    if len(pcs) != 0:
         pcs = np.concatenate([normals, colors, points], axis=1)
         label = api_semantic_segmentation(pcs)
         colors = [np.random.uniform(0,1,(3)) for _ in range(13)]
@@ -258,15 +244,40 @@ def process_sensor_data(recived_data_folder):
         ppc = o3d.geometry.PointCloud()
         ppc.points = o3d.utility.Vector3dVector(xyz)
         ppc.colors = o3d.utility.Vector3dVector(rgb)
-        o3d.io.write_point_cloud(depth_sem_seg_path, ppc)
+        o3d.io.write_point_cloud(rgb_sem_seg_path, ppc)
+    else:
+        rgb_sem_seg_dataset_path = ""
+    
+
+    # # depth semantic segmentation
+    if depth_isExist:
+        depth_sem_seg_path = dir_path + "depth_semantic_segmentation.ply"
+        depth_sem_seg_dataset_path = dataset_path + "depth_semantic_segmentation.ply"
+        pcs = o3d.io.read_point_cloud(depth_recon_path)
+        pcs.estimate_normals()
+        points = pcs.points
+        colors = pcs.colors
+        normals = pcs.normals
+        if len(pcs) != 0:
+            pcs = np.concatenate([normals, colors, points], axis=1)
+            label = api_semantic_segmentation(pcs)
+            colors = [np.random.uniform(0,1,(3)) for _ in range(13)]
+            xyz = pcs[:, 6:9]
+            rgb = label2rgb(np.array(label), colors = colors)
+            ppc = o3d.geometry.PointCloud()
+            ppc.points = o3d.utility.Vector3dVector(xyz)
+            ppc.colors = o3d.utility.Vector3dVector(rgb)
+            o3d.io.write_point_cloud(depth_sem_seg_path, ppc)
+        else:
+            depth_sem_seg_dataset_path = ""
 
     # write all url to dataset
     sensor_data_id = addSensorData(rgb_video_path[2], depth_video_path[2], lidar_video_path[2], dataset_path + "sensor_data.h5", date, dataset_path + "cover.jpg")
-    addAlgorithmResData(sensor_data_id, 0, "rgb_reconstruction", dataset_path + "rgb_reconstruction.ply")
-    addAlgorithmResData(sensor_data_id, 2, "rgb_semantic_segmentation", dataset_path + "rgb_semantic_segmentation.ply")
+    addAlgorithmResData(sensor_data_id, 0, "rgb_reconstruction", rgb_recon_dataset_path)
+    addAlgorithmResData(sensor_data_id, 2, "rgb_semantic_segmentation", rgb_sem_seg_dataset_path)
     if depth_isExist:
-        addAlgorithmResData(sensor_data_id, 1, "depth_reconstruction", dataset_path + "depth_reconstruction.ply")
-        addAlgorithmResData(sensor_data_id, 3, "depth_semantic_segmentation", dataset_path + "depth_semantic_segmentation.ply")
+        addAlgorithmResData(sensor_data_id, 1, "depth_reconstruction", depth_recon_dataset_path)
+        addAlgorithmResData(sensor_data_id, 3, "depth_semantic_segmentation", depth_sem_seg_dataset_path)
 
 
 
