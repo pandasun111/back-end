@@ -17,13 +17,14 @@ CORS(app, supports_credentials=True)
 @cross_origin()
 def getallsceneinfo():
     data = querySensorData()
-
+    url = "http://114.212.81.162:4001"
     res = []
     for d in data:
         res.append({
             "sceneId": d["sensor_data_id"],
             "title": "Scene {}".format(d["sensor_data_id"]),
-            "description": d["upload_date"]
+            "description": d["upload_date"],
+            "cover": url + d["sensor_data_cover"]
         })
 
     return jsonify({"res": res})

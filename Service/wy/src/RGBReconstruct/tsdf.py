@@ -222,7 +222,9 @@ class TSDF():
             label_viz[(label_viz<0) | (label_viz>=len(cmap))]=0
             colors = cmap[label_viz,:]
         else:
-            colors = None
+            colors = []
+            for i in range(verts.shape[0]):
+                colors.append([0.75, 0.75, 0.75])
 
         colors = np.array(colors, dtype=np.int32)
         vertex_attributes['semseg'] = np.array(vertex_attributes['semseg'], dtype=np.int32)

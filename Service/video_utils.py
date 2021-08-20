@@ -3,6 +3,8 @@ import cv2
 import sys
 import numpy as np
 import glob
+
+
 def progressbar(current, total, num=40, prefix=""):
     sys.stdout.write("\r{} {}/{} |{}{}| {:.2f}%".format(prefix, current, total,
                                                         "*" * int(num * current / total),
