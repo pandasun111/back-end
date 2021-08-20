@@ -235,7 +235,7 @@ def process_sensor_data(recived_data_folder):
     points = pcs.points
     colors = pcs.colors
     normals = pcs.normals
-    if len(pcs) != 0:
+    if len(pcs.points) != 0:
         pcs = np.concatenate([normals, colors, points], axis=1)
         label = api_semantic_segmentation(pcs)
         colors = [np.random.uniform(0,1,(3)) for _ in range(13)]
@@ -258,7 +258,7 @@ def process_sensor_data(recived_data_folder):
         points = pcs.points
         colors = pcs.colors
         normals = pcs.normals
-        if len(pcs) != 0:
+        if len(pcs.points) != 0:
             pcs = np.concatenate([normals, colors, points], axis=1)
             label = api_semantic_segmentation(pcs)
             colors = [np.random.uniform(0,1,(3)) for _ in range(13)]
