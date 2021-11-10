@@ -1,9 +1,12 @@
+import os
+os.path.append('..')
+
 import requests
 from flask_cors import *
 from flask import Flask, render_template, Response
 from flask import request
 from flask import jsonify
-from psgn import main
+from service.psgn.main import run
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True) # 允许跨域
@@ -14,16 +17,20 @@ CORS(app, supports_credentials=True) # 允许跨域
 def api1():
 	## 这里举一个例子，例如，我输入的是一段视频，输出是一个三维模型，那么，我会告诉你视频地址在哪，然后，你将三维模型存储在文件里，返回给我三维模型文件地址
     image_path = request.get_json()['image_path']
+	method_name = request..get_json()['method_name']
     
     try:
 		# 这里开始写你的算法，例如
-		model_path = reconstruct(image_path) # 重建并返回结果地址
-		
-		# 返回结果至前端，包括处理是否成功 success字段，以及你的结果字段 model_path
-		return jsonify({
-			"sucess": 1,
-			"model_path": model_path
-			})
+		if method_name == 'psgn':
+			result_path = run(image_path) # 重建并返回结果地址
+		else:
+			raise ValueError('rcf')
+
+	# 返回结果至前端，包括处理是否成功 success字段，以及你的结果字段 model_path
+	return jsonify({
+		"sucess": 1,
+		"result_path": result_path
+		})
     except Exception, e:
 		# 捕获异常，例如你的算法中间出错了，出错信息要提示
 
